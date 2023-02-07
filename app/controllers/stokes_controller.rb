@@ -1,0 +1,2 @@
+class StokesController < ApplicationController
+end
