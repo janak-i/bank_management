@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
 	end
 
 	def encode_user_data(payload)
+		byebug
 		token = JWT.encode payload, SECRET, "HS256"
 		return token
 	end
@@ -28,24 +29,29 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+
 	def current_user
-		if decode_user_data
-			user_id = decode_user_data[0]['user_id']
-			@user = User.find_by(id: user_id)
-		else
-			render json: { message: 'Did not find user.' }, status: :unauthorized
-		end
+      @current_user ||= User.find(@token.id) if @token.present?
+    end
 
-	end
+	# def current_user
+	# 	if decode_user_data
+	# 		user_id = decode_user_data[0]['user_id']
+	# 		@user = User.find_by(id: user_id)
+	# 	else
+	# 		render json: { message: 'Did not find user.' }, status: :unauthorized
+	# 	end
 
-	def logged_in?
-		byebug
-		!!current_user
-	end
+	# end
 
-	def authorized
-		render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
-	end
+	# def logged_in?
+	# 	byebug
+	# 	!!current_user
+	# end
+
+	# def authorized
+	# 	render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
+	# end
 
 
 

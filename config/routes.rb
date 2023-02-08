@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   post "/signup", to: "sessions#signup"
   resources :users
   resources :accounts
+  resources :transactions
 end

@@ -1,39 +1,38 @@
-class TransactionsController < ApplicationController
+ class TransactionsController < ApplicationController
 
   def new
+    byebug
     @account = Account.find(params[:account_id])
     @transaction = Transaction.new
     @user = @account.user
-
-    if logged_in? && current_user == @user
-    else
-      flash[:message] = "Access Denied: Invalid User"
-      redirect_to '/'
-    end
+    render json: @user
   end
 
   def create
+    byebug
     @account = Account.find(params[:account_id])
-    @transaction = @account.transactions.build(transaction_params)
+    @transaction = @account.transactions.create(transaction_params)
 
     if @transaction.save
-      render json: @transaction
+      render json: @transaction, status: 201
     else
-      flash[:message] = @transaction.errors.full_messages_for(:amount).first
-      render "accounts/show"
+      render json: {erors: @transaction.errors_full_messages}, status: 503
     end
   end
 
   def edit
     @transaction = Transaction.find(params[:id])
-    @transaction.process_transaction
-    redirect_to account_path(@transaction.account_id)
+    if @transaction.process_transaction
+      render json: @transaction.account_id, status: 201
+    else
+      render json: {erors: @transaction.errors_full_messages}, status: 503
+    end
   end
 
   def destroy
     @transaction = Transaction.find(params[:id])
     @transaction.delete
-    redirect_to account_path(params[:account_id])
+    render json: {message: "transaction successfully deleted"}
   end
 
   def highest
@@ -46,3 +45,8 @@ class TransactionsController < ApplicationController
     params.require(:transaction).permit(:type_of_transaction, :amount, :account_id, :user_id)
   end
 end
+
+
+
+
+
