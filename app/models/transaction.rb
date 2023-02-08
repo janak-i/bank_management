@@ -14,6 +14,7 @@ class Transaction < ApplicationRecord
   end
 
   def process_transaction
+    byebug
     if self.type_of_transaction == "Deposit" && !self.processed
       self.account.update(:balance => account.balance + self.amount)
       self.update(:processed => true)
