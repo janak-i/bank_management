@@ -1,4 +1,4 @@
- class TransactionsController < ApplicationController
+class TransactionsController < ApplicationController
 
   def new
     byebug
@@ -9,7 +9,6 @@
   end
 
   def create
-    byebug
     @account = Account.find(params[:account_id])
     @transaction = @account.transactions.create(transaction_params)
 
@@ -20,6 +19,9 @@
     end
   end
 
+
+
+
   def edit
     @transaction = Transaction.find(params[:id])
     if @transaction.process_transaction
@@ -29,24 +31,55 @@
     end
   end
 
+
+
   def destroy
     @transaction = Transaction.find(params[:id])
     @transaction.delete
     render json: {message: "transaction successfully deleted"}
   end
 
-  def highest
-    @highest = Transaction.highest_deposit
+  def credit_amount
+    @account=Transaction.find(params[:account_id])
+    balance =params[:balance].to_f
+    amount= params[:amount].to_f
+    transaction_type=params[:transaction_type]
+    if transaction_type == 'credit'
+      total_balance = balance.to_f+amount.to_f
+      @account =Transaction.new
+    elsif@account.save 
+    else
+      render json: {erors: @total_balance.errors_full_messages}, status: 503
+    end
+      render json:{
+      "balance": "#{balance}#{transaction_type}",
+      "transactiontype": transaction_type,
+      "remainbalance": total_balance}, status: 200
   end
 
-  private
 
+  def debit_amount
+    byebug
+    @account=Transaction.find(params[:account_id])
+    balance =params[:balance].to_f
+    amount= params[:amount].to_f
+    transaction_type=params[:transaction_type]
+    if transaction_type=='debit'
+      byebug
+      total_balance=balance.to_f-amount.to_f
+    else
+      render json: {erors: @transaction.errors_full_messages}, status: 503
+    end
+    render json:{
+      "amount": params[:amount],
+      "balance": "#{balance}#{transaction_type}",
+      "transactiontype": transaction_type,
+      "remainbalance": total_balance}, status: 200
+  end
+  private
   def transaction_params
     params.require(:transaction).permit(:type_of_transaction, :amount, :account_id, :user_id)
   end
 end
-
-
-
 
 
