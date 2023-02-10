@@ -41,13 +41,14 @@ class TransactionsController < ApplicationController
 
   def credit_amount
     byebug
-    @account=A.find(params[:account_id])
+    @account=Account.find(params[:account_id])
     balance =params[:balance].to_f
     amount= params[:amount].to_f
     transaction_type=params[:transaction_type]
     if transaction_type == 'credit'
       byebug
       total_balance = balance.to_f+amount.to_f
+      @account.update(balance: total_balance)
     else
       render json: {erors: @total_balance.errors_full_messages}, status: 503
     end
@@ -66,6 +67,7 @@ class TransactionsController < ApplicationController
     if transaction_type=='debit'
       byebug
       total_balance=balance.to_f-amount.to_f
+      @account.update(balance: total_balance)
     else
       render json: {erors: @total_balance.errors_full_messages}, status: 503
     end
