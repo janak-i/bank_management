@@ -46,15 +46,6 @@ class AccountsController < ApplicationController
 		render json: @account, status: 201
 	end
 
-	def withdraw
-		@user=Account.find(params[:user_id])
-
-
-	end
-
-	def deposite
-		@user=Account.find(params[:user_id])
-	end
 
 
 	private

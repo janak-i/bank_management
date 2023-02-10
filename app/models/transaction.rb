@@ -7,6 +7,7 @@ class Transaction < ApplicationRecord
     credit: '1',
     debit: '0'
   }
+  scope :processed, -> { where( processed: true) }
   # validates :type_of_transaction, inclusion: { in: %w(Deposit Withdrawal Fee), message: "You must enter a valid transaction type. Choose from the following; 'Deposit', 'Withdrawal', 'Fee'"}
   # scope :processed, -> { where( processed: true) }
   # scope :processed_withdrawals, -> { processed.where("type_of_transaction == 'Withdrawal'")}
@@ -17,27 +18,21 @@ class Transaction < ApplicationRecord
   #   %w[Withdrawalwithdraw Deposit]
   # end
 
-  # def process_transaction
-  #   byebug
-  #   if self.type_of_transaction == "Deposit" && !self.processed
-  #     self.account.update(:balance => account.balance + self.amount)
-  #     self.update(:processed => true)
+  def process_transaction
+    byebug
+    if self.transaction_type == "credit" && !self.processed
+      self.account.update(:balance => account.balance + self.amount)
+      self.update(:processed => true)
 
-  #     "You have successfully deposited #{self.amount}."
+      "You have successfully credited #{self.amount}."
 
-  #   elsif self.type_of_transaction == "Withdrawal" && !self.processed
-  #     self.account.update(:balance => account.balance - self.amount)
-  #     self.update(:processed => true)
+    elsif self.transaction_type == "debit" && !self.processed
+      self.account.update(:balance => account.balance - self.amount)
+      self.update(:processed => true)
 
-  #     "You have successfully withdrawn #{self.amount}."
-  #   elsif self.type_of_transaction == "Fee" && !self.processed
-  #     self.account.update(:balance => account.balance - self.amount)
-  #     self.update(:processed => true)
-
-  #     "You have successfully paid the fee of #{self.amount}"
-  #   end
-  # end
-
+      "You have successfully debited #{self.amount}."
+    end
+  end
 end
 
 

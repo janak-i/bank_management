@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   resources :users
   resources :accounts
   resources :transactions
+  resources :shares
+  resources :stocks
 end
