@@ -13,6 +13,7 @@
 ActiveRecord::Schema[7.0].define(version: 2023_02_06_131449) do
   create_table "accounts", force: :cascade do |t|
     t.string "type_of_account"
+    t.integer "account_number"
     t.integer "balance"
     t.string "user_id"
     t.datetime "created_at", precision: nil, null: false

@@ -1,2 +1,0 @@
-class StokesController < ApplicationController
-end

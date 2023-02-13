@@ -1,15 +1,15 @@
- class TransactionsController < ApplicationController
+class TransactionsController < ApplicationController
+  before_action :authentication
 
   def new
-    byebug
     @account = Account.find(params[:account_id])
     @transaction = Transaction.new
     @user = @account.user
     render json: @user
   end
 
+
   def create
-    byebug
     @account = Account.find(params[:account_id])
     @transaction = @account.transactions.create(transaction_params)
 
@@ -30,23 +30,57 @@
   end
 
   def destroy
-    @transaction = Transaction.find(params[:id])
-    @transaction.delete
+    @account = Account.find(params[:id])
+    @account.delete
     render json: {message: "transaction successfully deleted"}
   end
 
-  def highest
-    @highest = Transaction.highest_deposit
+  def credit_amount
+    @account=Account.find(params[:account_id])
+    balance =params[:balance].to_f
+    amount= params[:amount].to_f
+    transaction_type=params[:transaction_type]
+    if transaction_type == 'credit'
+      byebug
+      total_balance = balance.to_f+amount.to_f
+      @account.update(balance: total_balance)
+    else
+      render json: {erors: @total_balance.errors_full_messages}, status: 503
+    end
+      render json:{
+      "amount": params[:amount],
+      "transactiontype": transaction_type,
+      "total_balance": total_balance}, status: 200
+  end
+
+  def debit_amount
+    @account=Account.find(params[:account_id])
+    balance =params[:balance].to_f
+    amount= params[:amount].to_f
+    transaction_type=params[:transaction_type]
+    if transaction_type=='debit'
+      byebug
+      total_balance=balance.to_f-amount.to_f
+      @account.update(balance: total_balance)
+    else
+      render json: {erors: @total_balance.errors_full_messages}, status: 503
+    end
+    render json:{
+      "amount": params[:amount],
+      "transactiontype": transaction_type,
+      "total_balance": total_balance}, status: 200
+  end
+
+  def check_balance
+    @account=Account.find(params[:account_id])
+    @account.balance
+    render json: @account, status: 201
   end
 
   private
-
   def transaction_params
     params.require(:transaction).permit(:type_of_transaction, :amount, :account_id, :user_id)
+    end
   end
-end
-
-
-
 
 
