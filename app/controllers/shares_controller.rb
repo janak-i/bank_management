@@ -1,5 +1,5 @@
-
 class SharesController < ApplicationController
+	before_action :authentication
 	def show
 		@share = Share.find(params[:id])
 		render json: @share
@@ -13,7 +13,6 @@ class SharesController < ApplicationController
 	end
 
 	def create
-		byebug
 		@user = User.find(params[:user_id])
 		share = Share.new(share_params)
 		share.company_name = Stock.find(share.stock_id).company_name

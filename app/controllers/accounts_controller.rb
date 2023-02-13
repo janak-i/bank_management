@@ -1,9 +1,8 @@
 class AccountsController < ApplicationController
-	# before_action :authentication
-	# before_action :current_user
-	# before_action :authorized
-	# skip_before_action :authorized, only: [:create]x
+	before_action :authentication
+
 	def new
+		byebug
 		@account = Account.new
 		@user = User.find(params[:user_id])
 		if login? && current_user == @user
@@ -23,8 +22,8 @@ class AccountsController < ApplicationController
 		end
 	end
 
-
 	def index
+		byebug
 		@user = User.find(params[:user_id])
 		@accounts = @user.accounts
 		render json: @accounts, status: 201
@@ -46,11 +45,9 @@ class AccountsController < ApplicationController
 		render json: @account, status: 201
 	end
 
-
-
 	private
 	def account_params
-		params.require(:account).permit(:type_of_account, :balance, :user_id)
+		params.require(:account).permit(:type_of_account, :balance, :account_number, :user_id)
 	end
 end
 

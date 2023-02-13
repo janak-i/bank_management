@@ -20,17 +20,16 @@ class ApplicationController < ActionController::Base
 
 	def decode_user_data(token)
 		begin
-			byebug
-			data = JWT.decode token, SECRET, true, { algorithm: "HS256" }
-			return data
+			@data = JWT.decode token, SECRET, true, { algorithm: "HS256" }
+			return @data
 		rescue => e
 			puts e
 		end
 	end
 
-
 	def current_user
-      @current_user ||= User.find(@token.id) if @token.present?
-    end
+		@current_user ||= User.find_by(id: @data[0]['user_data'])
+	end
+
 end
 
