@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post "/credit", to: "transactions#credit_amount"
   post "/debit", to: "transactions#debit_amount"
   get "/check", to: "transactions#check_balance"
+  get "/totalsum", to: "transactions#total_balance_sum"
   resources :users
   resources :accounts
   resources :transactions

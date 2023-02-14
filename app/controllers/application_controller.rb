@@ -30,6 +30,5 @@ class ApplicationController < ActionController::Base
 	def current_user
 		@current_user ||= User.find_by(id: @data[0]['user_data'])
 	end
-
 end
 

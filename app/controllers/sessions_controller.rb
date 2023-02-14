@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
 
-	before_action :authenticate, :only => [:login]
+	before_action :authentication, :only => [:login]
 
 	def signup
 		user = User.new(email: params[:email], password_digest: params[:password_digest])

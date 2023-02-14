@@ -28,6 +28,7 @@ gem "stimulus-rails"
 gem 'active_model_serializers'
 gem 'jwt'
 gem 'byebug', '~> 9.0', '>= 9.0.6'
+gem 'will_paginate', '~> 3.3'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
@@ -59,8 +60,11 @@ group :development, :test do
   gem 'factory_bot_rails'
 
   gem 'faker', '~> 1.6', '>= 1.6.6'
-  gem 'rspec-rails', '~> 3.4', '>= 3.4.2'
-  gem 'shoulda-matchers', '~> 5.3'
+  gem 'rspec-rails', '~> 4.1.0'
+  gem 'shoulda-matchers', '~> 5.3.0'
+
+
+
 end
 
 group :development do
