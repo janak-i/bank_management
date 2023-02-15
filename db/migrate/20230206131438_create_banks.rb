@@ -1,8 +1,10 @@
 class CreateBanks < ActiveRecord::Migration[5.2]
   def change
     create_table :banks do |t|
+      t.string :IFSC_code
       t.string :name
-      t.references :account
+      t.string :address
+      t.integer :bank_balance
 
       t.timestamps
     end

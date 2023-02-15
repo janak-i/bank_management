@@ -1,8 +1,9 @@
 class SessionsController < ApplicationController
-
-	before_action :authentication, :only => [:login]
+	before_action :authentication, :only => [:login, :signup]
+	after_action :send_push_notification
 
 	def signup
+		byebug
 		user = User.new(email: params[:email], password_digest: params[:password_digest])
 		if user.save
 			token = encode_user_data({ user_data: user.id })

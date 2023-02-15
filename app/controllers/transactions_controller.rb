@@ -1,5 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :authentication
+  before_action :current_user, :only => [:check_balance]
 
   def new
     @account = Account.find(params[:account_id])
@@ -67,11 +68,10 @@ class TransactionsController < ApplicationController
     render json:{
       "amount": params[:amount],
       "transactiontype": transaction_type,
-      "total_balance": total_balance}, status: 200
+      "total_remaning balance": total_balance}, status: 200
   end
   
   def total_balance_sum
-    byebug
     @user=User.find(params[:user_id])
     @account=@user.accounts
     @account.balance.each do |p|
@@ -85,9 +85,11 @@ class TransactionsController < ApplicationController
 
 
   def check_balance
-    @account=Account.find(params[:account_id])
-    @account.balance
-    render json: @account, status: 201
+    if user=current_user
+      @account=user.accounts.find(params[:account_id])
+      @account.balance
+      render json: @account, status: 201
+    end
   end
 
   private
