@@ -5,6 +5,8 @@ class CreateBanks < ActiveRecord::Migration[5.2]
       t.string :name
       t.string :address
       t.integer :bank_balance
+      t.references :user
+      t.references :loan
 
       t.timestamps
     end

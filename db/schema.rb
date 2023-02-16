@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_15_114402) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_16_064418) do
   create_table "accounts", force: :cascade do |t|
     t.string "type_of_account"
     t.integer "account_number"
@@ -25,13 +25,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_114402) do
     t.string "name"
     t.string "address"
     t.integer "bank_balance"
+    t.integer "user_id"
+    t.integer "loan_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["loan_id"], name: "index_banks_on_loan_id"
+    t.index ["user_id"], name: "index_banks_on_user_id"
   end
 
   create_table "loans", force: :cascade do |t|
     t.integer "loan_number"
-    t.integer "amount"
+    t.float "principal_amount"
+    t.integer "rate_of_interest"
+    t.integer "amount_of_time"
     t.string "typeof_loan"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -91,6 +97,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_114402) do
     t.string "password_digest"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.string "Aadhaar_card"
   end
 
 end
