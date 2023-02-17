@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-	before_action :authentication, :only => [:login, :signup]
+	before_action :authentication, :only => [:login]
 	# after_action :send_push_notification
 
 	def signup
@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
 	def login
 		byebug
 		user = User.find_by(email: params[:email])
-		if user && user.password == params[:password]
+		if user && user.password_digest == params[:password_digest]
 			token = encode_user_data({ user_data: user.id })
 			render json: { token: token }
 		else

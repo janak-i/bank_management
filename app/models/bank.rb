@@ -1,5 +1,5 @@
 class Bank < ApplicationRecord
-  belongs_to :loans, class_name: "User", optional: true
+  belongs_to :loan, class_name: "User", optional: true
   validates :name, presence: true
   belongs_to :user
   # validates :Aadhaar_card, presence: true, uniqueness

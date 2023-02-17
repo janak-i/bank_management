@@ -53,7 +53,6 @@ class ApplicationController < ActionController::Base
 	end
 
 	def current_user
-		byebug
 		@current_user ||= User.find_by(id: params["id"])
 	end
 end

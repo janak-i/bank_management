@@ -7,8 +7,8 @@ class User < ApplicationRecord
   has_many :shares
   has_many :stocks, through: :shares
   belongs_to :banks, class_name: "User", optional: true
-  validates :Aadhaar_card, length: { is: 12 }
-  validates :Aadhaar_card, presence: true
+  # validates :Aadhaar_card, length: { is: 12 }
+  # validates :Aadhaar_card, presence: true
   has_secure_password
   after_save :create_push_notification
 
