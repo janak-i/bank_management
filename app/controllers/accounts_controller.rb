@@ -13,6 +13,7 @@ class AccountsController < ApplicationController
 	end
 
 	def create
+		byebug
 		@user = User.find(params[:user_id])
 		@account = @user.accounts.create(account_params)
 		if @account.save

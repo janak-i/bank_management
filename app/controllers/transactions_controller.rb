@@ -1,5 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :authentication
+  before_action :current_user, :only => [:check_balance]
 
   def new
     @account = Account.find(params[:account_id])
@@ -37,12 +38,12 @@ class TransactionsController < ApplicationController
 
   def credit_amount
     @account=Account.find(params[:account_id])
-    balance =params[:balance].to_f
+    @balance=@account.balance
     amount= params[:amount].to_f
     transaction_type=params[:transaction_type]
+    byebug
     if transaction_type == 'credit'
-      byebug
-      total_balance = balance.to_f+amount.to_f
+      total_balance = @balance.to_f+amount.to_f
       @account.update(balance: total_balance)
     else
       render json: {erors: @total_balance.errors_full_messages}, status: 503
@@ -55,12 +56,11 @@ class TransactionsController < ApplicationController
 
   def debit_amount
     @account=Account.find(params[:account_id])
-    balance =params[:balance].to_f
+    @balance=@account.balance
     amount= params[:amount].to_f
     transaction_type=params[:transaction_type]
     if transaction_type=='debit'
-      byebug
-      total_balance=balance.to_f-amount.to_f
+      total_balance=@balance.to_f-amount.to_f
       @account.update(balance: total_balance)
     else
       render json: {erors: @total_balance.errors_full_messages}, status: 503
@@ -68,19 +68,32 @@ class TransactionsController < ApplicationController
     render json:{
       "amount": params[:amount],
       "transactiontype": transaction_type,
-      "total_balance": total_balance}, status: 200
+      "total_remaning balance": total_balance}, status: 200
+  end
+  
+  def total_balance_sum
+    @user=User.find(params[:user_id])
+    @account=@user.accounts
+    @account.balance.each do |p|
+      if p=='balance'
+        total_sum=p.sum(balance)
+        render json: @total_sum, status: 200
+      end
+    end
   end
 
+
+
   def check_balance
-    @account=Account.find(params[:account_id])
-    @account.balance
-    render json: @account, status: 201
+    if user=current_user
+      @account=user.accounts.find(params[:account_id])
+      @account.balance
+      render json: @account, status: 201
+    end
   end
 
   private
   def transaction_params
     params.require(:transaction).permit(:type_of_transaction, :amount, :account_id, :user_id)
-    end
   end
-
-
+end
